@@ -34,6 +34,7 @@ public class TestVisualization extends Visualizer {
     }
 
     public void paintVisualization(Graphics2D g2d) {
+        g2d.setColor(Color.CYAN);
         g2d.fill(rect1);
         g2d.fill(rect2);
         g2d.fill(rect3);
