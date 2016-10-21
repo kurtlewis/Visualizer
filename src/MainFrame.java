@@ -10,7 +10,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
-        setSize(BOARDWIDTH, BOARDHEIGHT);
+        setSize(BOARD_WIDTH, BOARD_HEIGHT);
         setLocationRelativeTo(null);
         setTitle("Visualizations");
         setResizable(true);
