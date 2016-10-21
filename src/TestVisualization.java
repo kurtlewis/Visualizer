@@ -12,10 +12,10 @@ public class TestVisualization extends Visualizer {
 
     public TestVisualization() {
         setBackground(Color.BLACK);
-        rect1 = new Rectangle(10, 10, 50, 50);
-        rect2 = new Rectangle(MainFrame.BOARD_WIDTH - 60, 10, 50, 50);
-        rect3 = new Rectangle(MainFrame.BOARD_WIDTH - 60, MainFrame.BOARD_HEIGHT - 60, 50, 50);
-        rect4 = new Rectangle(10, MainFrame.BOARD_HEIGHT - 60, 50, 50);
+        rect1 = new Rectangle(300, 300, 50, 50);
+        rect2 = new Rectangle(MainFrame.BOARD_WIDTH - 350, 300, 50, 50);
+        rect3 = new Rectangle(MainFrame.BOARD_WIDTH - 350, MainFrame.BOARD_HEIGHT - 350, 50, 50);
+        rect4 = new Rectangle(300, MainFrame.BOARD_HEIGHT - 350, 50, 50);
     }
 
     public void cycle() {
@@ -23,7 +23,7 @@ public class TestVisualization extends Visualizer {
         rect2.setLocation((int)rect2.getX() - 1, (int)rect2.getY() + 1);
         rect3.setLocation((int)rect3.getX() - 1, (int)rect3.getY() - 1);
         rect4.setLocation((int)rect4.getX() + 1, (int)rect4.getY() - 1);
-        if (rect1.getX() > MainFrame.BOARD_WIDTH - 60 && rect1.getY() > MainFrame.BOARD_HEIGHT - 60) {
+        if (rect1.getX() > MainFrame.BOARD_WIDTH - 350 && rect1.getY() > MainFrame.BOARD_HEIGHT - 350) {
             Rectangle tempRect = rect1;
             rect1 = rect3;
             rect3 = tempRect;

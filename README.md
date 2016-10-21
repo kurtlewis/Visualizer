@@ -6,6 +6,7 @@ This project is a Java applet designed to run visualizations of different algori
 ### Note to Self - Temporary
 To compile from Visualizer/
 ```
+mkdir bin/
 javac src/*.java -d bin/
 ```
 To run
