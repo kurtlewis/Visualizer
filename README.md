@@ -3,11 +3,7 @@ This project is a Java applet designed to run visualizations of different algori
 
 
 ### Note to Self - Temporary
-To compile from Visualizer/ [FOR NOW - this may cause issues when MainFrame starts referencing other classes]
-```
-javac src/MainFrame.java -d bin/
-```
-Now it looks like the following command, but I'm keeping the above temporarily
+To compile from Visualizer/
 ```
 javac src/*.java -d bin/
 ```
@@ -15,4 +11,4 @@ To run
 ```
 java -cp bin/ MainFrame
 ```
-MAKE A BUILD SCRIPT
+MAKE A BUILD SCRIPT KURT
