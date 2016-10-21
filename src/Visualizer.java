@@ -14,7 +14,7 @@ public abstract class Visualizer extends JPanel implements Runnable {
     private Thread animator;
 
     public Visualizer() {
-        setSize(MainFrame.BOARDWIDTH, MainFrame.BOARDHEIGHT);
+        setSize(MainFrame.BOARD_WIDTH, MainFrame.BOARD_HEIGHT);
     }
 
     /***

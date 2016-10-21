@@ -1,12 +1,12 @@
 /***********************************************************************
  @author Kurt Lewis 
 ************************************************************************/
-
+import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 public class MainFrame extends JFrame {
     // TODO - determine default display size
-    public final int BOARDWIDTH = 900, BOARDHEIGHT = 900;
+    public final static int BOARD_WIDTH = 900, BOARD_HEIGHT = 900;
 
     public MainFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
@@ -15,11 +15,12 @@ public class MainFrame extends JFrame {
         setTitle("Visualizations");
         setResizable(true);
         setVisible(true);
+        run();
     }
 
     public void run() {
         // TODO - put logic here to run multiple and any Visualizations
-
+        add(new TestVisualization());
     }
 
     public static void main(String[] args) {
