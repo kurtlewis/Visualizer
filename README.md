@@ -3,9 +3,13 @@ This project is a Java applet designed to run visualizations of different algori
 
 
 ### Note to Self - Temporary
-To compile from Visualizer/ [FOR NOW]
+To compile from Visualizer/ [FOR NOW - this may cause issues when MainFrame starts referencing other classes]
 ```
-javac src/main/MainFrame.java -d bin/
+javac src/MainFrame.java -d bin/
+```
+Now it looks like the following command, but I'm keeping the above temporarily
+```
+javac src/*.java -d bin/
 ```
 To run
 ```
