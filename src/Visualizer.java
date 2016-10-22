@@ -38,8 +38,11 @@ public abstract class Visualizer extends JPanel implements Runnable {
     /***
         Basic actions should be handled by this method. 
         For example, one sorting action would occur per cycle call
+        Returns
+            False: Has not completed visualization
+            True: Has completed visualization and a new visualization can be loaded
     ***/
-    public abstract void cycle();
+    public abstract boolean cycle();
 
     /***
         The value returned by this function determines how fast your visualization occurs.
@@ -49,12 +52,22 @@ public abstract class Visualizer extends JPanel implements Runnable {
     public abstract int getDelay();
 
 
+    /***
+        Starts the visualizer animation/cycle thread and waits for it to finish before returning control
+    ***/
+    public void start() {
+        animator = new Thread(this);
+        animator.start();
+        try {
+            animator.join();
+        } catch (InterruptedException e) {
+            System.out.println("Caught InterruptedException: " + e.getMessage());
+        }
+    }
+
     @Override
     public void addNotify() {
         super.addNotify();
-
-        animator = new Thread(this);
-        animator.start();
     }
 
     @Override
@@ -62,6 +75,7 @@ public abstract class Visualizer extends JPanel implements Runnable {
         super.paint(g);
         // Have the extending class draw on an image so that it can be resized as needed
         Image bufferImage = createImage(DRAW_WIDTH, DRAW_HEIGHT);
+        // Give control to visualization to draw on buffer
         paintVisualization((Graphics2D)bufferImage.getGraphics());
         int width = getWidth();
         int height = getHeight(); 
@@ -78,9 +92,10 @@ public abstract class Visualizer extends JPanel implements Runnable {
         long beforeTime, timeDiff, sleep;
 
         beforeTime = System.currentTimeMillis();
+        boolean done;
 
         while (true) {
-            cycle();
+            done = cycle();
             repaint();
 
             timeDiff = System.currentTimeMillis() - beforeTime;
@@ -97,6 +112,11 @@ public abstract class Visualizer extends JPanel implements Runnable {
             }
 
             beforeTime = System.currentTimeMillis();
+            
+            // Animation has finished, kill thread
+            if (done) {
+                return;
+            }
         }
     }
 

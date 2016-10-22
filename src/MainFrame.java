@@ -20,7 +20,9 @@ public class MainFrame extends JFrame {
 
     public void run() {
         // TODO - put logic here to run multiple and any Visualizations
-        add(new TestVisualization());
+        TestVisualization test  = new TestVisualization();
+        add(test);
+        test.start();
     }
 
     public static void main(String[] args) {
