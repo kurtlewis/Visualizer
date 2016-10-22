@@ -11,11 +11,10 @@ public class TestVisualization extends Visualizer {
     private Rectangle rect1, rect2, rect3, rect4;
 
     public TestVisualization() {
-        setBackground(Color.BLACK);
-        rect1 = new Rectangle(300, 300, 50, 50);
-        rect2 = new Rectangle(MainFrame.BOARD_WIDTH - 350, 300, 50, 50);
-        rect3 = new Rectangle(MainFrame.BOARD_WIDTH - 350, MainFrame.BOARD_HEIGHT - 350, 50, 50);
-        rect4 = new Rectangle(300, MainFrame.BOARD_HEIGHT - 350, 50, 50);
+        rect1 = new Rectangle(300, 300, 100, 100);
+        rect2 = new Rectangle(Visualizer.DRAW_WIDTH - 400, 300, 100, 100);
+        rect3 = new Rectangle(Visualizer.DRAW_WIDTH - 400, Visualizer.DRAW_HEIGHT - 400, 100, 100);
+        rect4 = new Rectangle(300, Visualizer.DRAW_HEIGHT - 400, 100, 100);
     }
 
     public void cycle() {
@@ -23,7 +22,7 @@ public class TestVisualization extends Visualizer {
         rect2.setLocation((int)rect2.getX() - 1, (int)rect2.getY() + 1);
         rect3.setLocation((int)rect3.getX() - 1, (int)rect3.getY() - 1);
         rect4.setLocation((int)rect4.getX() + 1, (int)rect4.getY() - 1);
-        if (rect1.getX() > MainFrame.BOARD_WIDTH - 350 && rect1.getY() > MainFrame.BOARD_HEIGHT - 350) {
+        if (rect1.getX() > Visualizer.DRAW_WIDTH - 400 && rect1.getY() > Visualizer.DRAW_HEIGHT - 400) {
             Rectangle tempRect = rect1;
             rect1 = rect3;
             rect3 = tempRect;
@@ -34,6 +33,9 @@ public class TestVisualization extends Visualizer {
     }
 
     public void paintVisualization(Graphics2D g2d) {
+        // The background needs to be set manually, as drawing now occurs on an image rather than the actual component
+        g2d.setColor(Color.BLACK);
+        g2d.fillRect(0, 0, Visualizer.DRAW_WIDTH, Visualizer.DRAW_HEIGHT);
         g2d.setColor(Color.CYAN);
         g2d.fill(rect1);
         g2d.fill(rect2);

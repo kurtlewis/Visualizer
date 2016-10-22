@@ -7,11 +7,16 @@
 ****************************************************/
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import javax.swing.JPanel;
+import java.awt.Image;
+import java.awt.image.ReplicateScaleFilter;
+import java.awt.image.FilteredImageSource;
 import java.awt.Toolkit;
+import javax.swing.JPanel;
+
 
 public abstract class Visualizer extends JPanel implements Runnable {
     private Thread animator;
+    public final static int DRAW_WIDTH = 1000, DRAW_HEIGHT = 1000;
 
     public Visualizer() {
         setSize(MainFrame.BOARD_WIDTH, MainFrame.BOARD_HEIGHT);
@@ -20,6 +25,13 @@ public abstract class Visualizer extends JPanel implements Runnable {
     /***
         Override this class to paint your visualization. java.awt.Graphics2D is a great library for drawing
         basic shapes and text.
+
+        Draw using the public constants in the Visualizer class DRAW_WIDTH and DRAW_HEIGHT. You can draw assuming
+        a 1000 by 1000 square canvas, which the Visualizer will then resize as needed to the necessary size of the
+        JFrame that holds it. 
+
+        Drawing actually occurs on an image - this means the user does not have access to
+        JPanel (and other such Component children classes) methods such as setBackground(Color color)
     ***/
     public abstract void paintVisualization(Graphics2D g2d);
 
@@ -48,8 +60,16 @@ public abstract class Visualizer extends JPanel implements Runnable {
     @Override
     public void paint(Graphics g){
         super.paint(g);
-        Graphics2D g2d = (Graphics2D)g;
-        paintVisualization(g2d);
+        // Have the extending class draw on an image so that it can be resized as needed
+        Image bufferImage = createImage(DRAW_WIDTH, DRAW_HEIGHT);
+        paintVisualization((Graphics2D)bufferImage.getGraphics());
+        int width = getWidth();
+        int height = getHeight(); 
+        // Scale and resize the image
+        ReplicateScaleFilter scale = new ReplicateScaleFilter(width, height);
+        FilteredImageSource fis = new FilteredImageSource(bufferImage.getSource(), scale);
+        Image croppedImage = createImage(fis);
+        g.drawImage(croppedImage, 0, 0, null);
         Toolkit.getDefaultToolkit().sync();
     }
 
