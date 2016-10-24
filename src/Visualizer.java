@@ -18,10 +18,7 @@ public abstract class Visualizer extends JPanel implements Runnable {
     private Thread animator;
     public final static int DRAW_WIDTH = 1000, DRAW_HEIGHT = 1000;
 
-    public Visualizer() {
-        setSize(MainFrame.BOARD_WIDTH, MainFrame.BOARD_HEIGHT);
-    }
-
+    
     /***
         Override this class to paint your visualization. java.awt.Graphics2D is a great library for drawing
         basic shapes and text.

@@ -21,8 +21,10 @@ public class MainFrame extends JFrame {
     public void run() {
         // TODO - put logic here to run multiple and any Visualizations
         Visualizer test = new Sort();
+        test.setSize(getWidth(), getHeight());
         add(test);
         test.start();
+        remove(test);
     }
 
     public static void main(String[] args) {
