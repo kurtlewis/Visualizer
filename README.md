@@ -39,6 +39,9 @@ This repository is intended to visualize classic algorithms. For example, sorts,
 
 When considering an algorithm to visualize, check to make sure a visualization of that algorithm does not already exist in the project. We will only accept new algorithms, or radically different visualizations of already existing algorithms. Consider modfiying an Visualization if you think you can do it better, rather than creating a new one. 
 
+### Tips for drawing
+The window is set to scale dynamically, but your drawing canvas is constant. The constants ```Visualizer.DRAW_WIDTH``` and ```Visualizer.DRAW_HEIGHT``` are the maximum width and height of the canvas. Your visualizations can always be drawn presuming a 1000x1000 canvas, which will then be scaled to the actual size. The coordinates (0, 0) are in the top left of the window, and (1000, 1000) is in the bottom right.
+
 ### Methods to override
 
 ```
