@@ -20,40 +20,38 @@ public class MainFrame extends JFrame {
     }
 
     public void run(String[] args) {
-        /* Things that need to happen - 
-         - new instance of class
-         - set size of class to frame width and height
-         - add class to board
-         - call start on class
-         - remove board once start runs
-        */
+
         if (args.length == 0) {
-            //fill args with a list of classes in the bin/ folder
+            // If no arguments were supplied
+            // fill args with a list of classes in the bin/ folder
             // this will prrrrooobbbaaabbbllllyyy only work when run from Visualizer/ folder
             File[] files = new File("bin/").listFiles();
             args = new String[files.length];
             for (int i = 0; i < files.length; i++) {
-                args[i] = files[i].toString().substring(4, files[i].toString().length()-6);
+                //manually trim the strings. Definitely better ways to do this
+                if (files[i].toString().endsWith(".class")) {
+                    args[i] = files[i].toString().substring(4, files[i].toString().length()-6);
+                }
             }
         }
-        for (int i = 0; i < args.length; i++) {
-            try {
-                Object obj = ClassLoader.getSystemClassLoader().loadClass(args[i]).newInstance(); 
-                // Currently broken - this needs to reject abstract classes such as Visualizer itself. Try making the above line create a 
-                // Class<?> instead.
-                if (Visualizer.class.isAssignableFrom(obj.getClass()) && !Modifier.isAbstract(obj.getClass().getModifiers())) {
-                    Visualizer visualization = (Visualizer)obj;
-                    visualization.setSize(getWidth(), getHeight());
-                    add(visualization);
-                    visualization.start();
-                    remove(visualization);
+        while (true) {
+            for (int i = 0; i < args.length; i++) {
+                try {
+                    Class<?> myClass = ClassLoader.getSystemClassLoader().loadClass(args[i]); 
+                    // Make sure class is a child class of Visualizer, and is not abstract
+                    if (Visualizer.class.isAssignableFrom(myClass) && !Modifier.isAbstract(myClass.getModifiers())) {
+                        Visualizer visualization = (Visualizer)myClass.newInstance();
+                        visualization.setSize(getWidth(), getHeight());
+                        add(visualization);
+                        visualization.start();
+                        remove(visualization);
+                    }          
+                } catch (Exception e) {
+                    System.out.println("ERROR - class " +args[i] + " could not be found. Please ensure it has been compiled.");
+                    System.exit(0);
                 }
-                //Visualizer visualization = (Visualizer)ClassLoader.getSystemClassLoader().loadClass(args[i]).newInstance();          
-            } catch (Exception e) {
-                System.out.println("ERROR - class " +args[i] + " could not be found. Please ensure it has been compiled.");
-                System.exit(0);
-            }
             
+            }
         }
     }
 
