@@ -24,7 +24,7 @@ java -cp bin/ MainFrame
 
 ## How to contribute
 
-Contributing is easy! Fork the repo on github, and create a new class in the ```src/``` directory
+Contributing is easy! Fork the repo on github, and create a new class named after the algorithm you're visualizing in the ```src/``` directory.
 
 This class should extend the class ```Visualizer``` and implement its three important methods listed below.
 
@@ -33,6 +33,13 @@ Take a look at the [Java Graphic2D library](https://docs.oracle.com/javase/7/doc
 The classes TestVisualization and Sort are intended to be examples of how to extend Visualizer.
 
 Once you've created your visualization and tested it, submit a pull request. Please document your code well, and make sure no artifacts are left from any IDE you might use.
+
+### Choosing a visualization
+This repository is intended to visualize classic algorithms. For example, sorts, searches, or tree operations.
+
+When considering an algorithm to visualize, check to make sure a visualization of that algorithm does not already exist in the project. We will only accept new algorithms, or radically different visualizations of already existing algorithms. Consider modfiying an Visualization if you think you can do it better, rather than creating a new one. 
+
+### Methods to override
 
 ```
 /***
