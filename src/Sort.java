@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.Random;
 
 public abstract class Sort extends Visualizer {
@@ -33,6 +34,7 @@ public abstract class Sort extends Visualizer {
     }
 
     public void paintVisualization(Graphics2D g2d) {
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         // Draw Background
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0, 0, Visualizer.DRAW_WIDTH, Visualizer.DRAW_HEIGHT);
