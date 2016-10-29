@@ -2,16 +2,22 @@
  @author Kurt Lewis
 ***************************************************************************/
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.util.Random;
 
-public class Sort extends Visualizer {
-    private int[] array;
-    private int sortIndex;
-    protected String title;
+public abstract class Sort extends Visualizer {
+    protected int[] array;
+    protected int sortIndex;
+    private String title = "Sort";
+    private Font font;
 
     public Sort() {
         array = new int[50];
+        font = new Font("Helvetica", Font.BOLD, 60);
+
+        //Randomizes array of 50 items
         Random generator = new Random();
         for (int i = 0; i < array.length; i++) {
             array[i] = i;
@@ -23,11 +29,20 @@ public class Sort extends Visualizer {
             array[index] = temp;
         }
         sortIndex = 0;
+        title = getTitle();
     }
 
     public void paintVisualization(Graphics2D g2d) {
+        // Draw Background
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0, 0, Visualizer.DRAW_WIDTH, Visualizer.DRAW_HEIGHT);
+        //draw font
+        g2d.setFont(font);
+        g2d.setColor(Color.WHITE);
+        FontMetrics metr = this.getFontMetrics(font);  
+        g2d.drawString(title, (Visualizer.DRAW_WIDTH - metr.stringWidth(title)) / 2, 100); 
+
+        // Draw bars for bar graph representing sort
         int barWidth = 800 / array.length;
         int barHeightScale = 800 / array.length;
         g2d.setColor(Color.GREEN);
@@ -37,24 +52,8 @@ public class Sort extends Visualizer {
         }
     }
 
-    public boolean cycle() {
-        boolean sorted = false;
-        while (array[sortIndex] < array[sortIndex+1]) {
-            sortIndex++;
-            if (sortIndex == array.length - 1) {
-                sortIndex = 0;
-                if (sorted) {
-                    return true;
-                } else {
-                    sorted = true;
-                }
-            }
-        }
-        int temp = array[sortIndex];
-        array[sortIndex] = array[sortIndex+1];
-        array[sortIndex+1] = temp;
-        return false;
-    }
+    // Override this method to provide a title for the sort
+    public abstract String getTitle();
 
     public int getDelay() {
         return 50;

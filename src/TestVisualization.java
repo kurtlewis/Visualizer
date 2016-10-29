@@ -28,7 +28,7 @@ public class TestVisualization extends Visualizer {
         //reset rectangles, or end the visualization if 5 swaps have been made
         if (rect1.getX() > Visualizer.DRAW_WIDTH - 400 && rect1.getY() > Visualizer.DRAW_HEIGHT - 400) {
             Rectangle tempRect = rect1; 
-            rect15 = rect3;
+            rect1 = rect3;
             rect3 = tempRect;
             tempRect = rect2;
             rect2 = rect4;
