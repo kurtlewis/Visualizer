@@ -5,7 +5,7 @@ In an effort to standardize, much of the overhead in drawing and animating has b
 
 ## Building and Running
 This project is intended to be built and run from the command line. 
- - Make sure you have a ```bin/``` folder
+ - Make sure you have a ```bin/``` folder in your  ```Visualizer/``` directory
 ```
 mkdir bin/
 ```
@@ -30,7 +30,7 @@ This class should extend the class ```Visualizer``` and implement its three impo
 
 Take a look at the [Java Graphic2D library](https://docs.oracle.com/javase/7/docs/api/java/awt/Graphics2D.html) for easy instructions and how to draw different shapes for a visualization of your algorithm! 
 
-The classes TestVisualization and Sort are intended to be examples of how to extend Visualizer.
+The classes TestVisualization and BubbleSort are intended to be examples of how to extend Visualizer.
 
 Once you've created your visualization and tested it, submit a pull request. Please document your code well, and make sure no artifacts are left from any IDE you might use.
 
