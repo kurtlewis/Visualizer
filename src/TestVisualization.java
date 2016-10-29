@@ -20,13 +20,15 @@ public class TestVisualization extends Visualizer {
     }
 
     public boolean cycle() {
+        // move rectangles
         rect1.setLocation((int)rect1.getX() + 1, (int)rect1.getY() + 1);
         rect2.setLocation((int)rect2.getX() - 1, (int)rect2.getY() + 1);
         rect3.setLocation((int)rect3.getX() - 1, (int)rect3.getY() - 1);
         rect4.setLocation((int)rect4.getX() + 1, (int)rect4.getY() - 1);
+        //reset rectangles, or end the visualization if 5 swaps have been made
         if (rect1.getX() > Visualizer.DRAW_WIDTH - 400 && rect1.getY() > Visualizer.DRAW_HEIGHT - 400) {
             Rectangle tempRect = rect1; 
-            rect1 = rect3;
+            rect15 = rect3;
             rect3 = tempRect;
             tempRect = rect2;
             rect2 = rect4;
