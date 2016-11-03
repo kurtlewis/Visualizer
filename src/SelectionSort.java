@@ -39,4 +39,9 @@ public class SelectionSort extends Sort {
     public String getTitle() {
         return "Selection Sort";
     }
+    
+    // Increase delay between cycles to better display swaps
+    public int getDelay() {
+        return 500;
+    }
 }
