@@ -13,6 +13,7 @@ public abstract class Sort extends Visualizer {
     protected int sortIndex;
     private String title = "Sort";
     private Font font;
+    private Color barColor, backgroundColor, titleColor;
 
     public Sort() {
         array = new int[50];
@@ -31,23 +32,26 @@ public abstract class Sort extends Visualizer {
         }
         sortIndex = 0;
         title = getTitle();
+        barColor = Color.GREEN;
+        backgroundColor = Color.BLACK;
+        titleColor = Color.WHITE;
     }
 
     public void paintVisualization(Graphics2D g2d) {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         // Draw Background
-        g2d.setColor(Color.BLACK);
+        g2d.setColor(backgroundColor);
         g2d.fillRect(0, 0, Visualizer.DRAW_WIDTH, Visualizer.DRAW_HEIGHT);
         //draw font
         g2d.setFont(font);
-        g2d.setColor(Color.WHITE);
+        g2d.setColor(titleColor);
         FontMetrics metr = this.getFontMetrics(font);  
         g2d.drawString(title, (Visualizer.DRAW_WIDTH - metr.stringWidth(title)) / 2, 100); 
 
         // Draw bars for bar graph representing sort
         int barWidth = 800 / array.length;
         int barHeightScale = 800 / array.length;
-        g2d.setColor(Color.GREEN);
+        g2d.setColor(barColor);
         for (int i = 0; i < array.length; i++) {
             int barHeight = barHeightScale*array[i];
             g2d.fillRect(100 + i * barWidth, 900 - barHeight, barWidth, barHeight);
@@ -59,5 +63,17 @@ public abstract class Sort extends Visualizer {
 
     public int getDelay() {
         return 50;
+    }
+
+    public void setBackgroundColor(Color color) {
+        backgroundColor = color;
+    }
+
+    public void setTitleColor(Color color) {
+        titleColor = color;
+    }
+
+    public void setBarColor(Color color) {
+        barColor = color;
     }
 }
