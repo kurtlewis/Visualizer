@@ -5,7 +5,7 @@
 import java.awt.Color;
 import java.util.Stack;
 
-public class Quicksort extends ColoredSort {
+public class Quicksort extends Sort {
 
     public static final Color RIGHT = Color.decode("#990000"), LEFT = Color.decode("#003366"),
             PIVOT = Color.decode("#999900"), DEFAULT_COLOR = Color.decode("#BA9242"),
@@ -18,7 +18,7 @@ public class Quicksort extends ColoredSort {
     public Quicksort() {
         super();
         for (int i = 0; i < array.length; i++)
-            setColor(i, DEFAULT_COLOR);
+            setMarkerColor(i, DEFAULT_COLOR);
         commands.push(0);
         commands.push(array.length - 1);
     }
@@ -37,19 +37,19 @@ public class Quicksort extends ColoredSort {
             startl = pivot;
 
             for(int i = 0; i < array.length; i++)
-                setColor(i, DEFAULT_COLOR);
+                setMarkerColor(i, DEFAULT_COLOR);
 
-            setColor(pivot, PIVOT);
+            setMarkerColor(pivot, PIVOT);
 
             for(int i = left + 1; i < right; i++)
-              setColor(i, SELECTED);
+              setMarkerColor(i, SELECTED);
 
-            setColor(right, RIGHT);
-            setColor(left, LEFT);
+            setMarkerColor(right, RIGHT);
+            setMarkerColor(left, LEFT);
         }
 
         while (right >= left && array[right] > array[pivot]) {
-            setColor(right, RIGHT);
+            setMarkerColor(right, RIGHT);
             right--;
             if (right > left) {
               delay = 50;
@@ -57,7 +57,7 @@ public class Quicksort extends ColoredSort {
             }
         }
         while (left <= right && array[left] < array[pivot]) {
-            setColor(left, LEFT);
+            setMarkerColor(left, LEFT);
             left++;
             if (left < right) {
               delay = 50;
