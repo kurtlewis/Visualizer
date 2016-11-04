@@ -15,6 +15,11 @@ public abstract class Sort extends Visualizer {
     private Font font;
     private Color barColor, backgroundColor, titleColor;
 
+    /**
+     * Colors of of markers at the different bar indicies.
+     */
+    private Color[] markerColors;
+
     public Sort() {
         array = new int[50];
         font = new Font("Helvetica", Font.BOLD, 60);
@@ -35,6 +40,12 @@ public abstract class Sort extends Visualizer {
         barColor = Color.GREEN;
         backgroundColor = Color.BLACK;
         titleColor = Color.WHITE;
+
+        //Setup the marker colors
+        markerColors = new Color[array.length];
+        for(int i = 0; i < array.length; i++) {
+            markerColors[i] = backgroundColor;
+        }
     }
 
     public void paintVisualization(Graphics2D g2d) {
@@ -45,8 +56,8 @@ public abstract class Sort extends Visualizer {
         //draw font
         g2d.setFont(font);
         g2d.setColor(titleColor);
-        FontMetrics metr = this.getFontMetrics(font);  
-        g2d.drawString(title, (Visualizer.DRAW_WIDTH - metr.stringWidth(title)) / 2, 100); 
+        FontMetrics metr = this.getFontMetrics(font);
+        g2d.drawString(title, (Visualizer.DRAW_WIDTH - metr.stringWidth(title)) / 2, 100);
 
         // Draw bars for bar graph representing sort
         int barWidth = 800 / array.length;
@@ -56,7 +67,28 @@ public abstract class Sort extends Visualizer {
             int barHeight = barHeightScale*array[i];
             g2d.fillRect(100 + i * barWidth, 900 - barHeight, barWidth, barHeight);
         }
+
+        // Draw markers for graph representing notes.
+        for (int i = 0; i < array.length; i++) {
+            g2d.setColor(markerColors[i]);
+            g2d.fillRect(100 + i * barWidth, 900, barWidth, barHeightScale);
+        }
     }
+
+    /**
+     *  Gets the color of a marker at a given index.
+     */
+    public Color getMarkerColor(int index) {
+        return markerColors[index];
+    }
+
+    /**
+     *  Sets the color of a marker at a given index.
+     */
+    public void setMarkerColor(int index, Color color) {
+        markerColors[index] = color;
+    }
+
 
     // Override this method to provide a title for the sort
     public abstract String getTitle();
