@@ -71,7 +71,7 @@ public abstract class Sort extends Visualizer {
         // Draw markers for graph representing notes.
         for (int i = 0; i < array.length; i++) {
             g2d.setColor(markerColors[i]);
-            g2d.fillRect(100 + i * barWidth, 900 - barHeightScale, barWidth, barHeightScale);
+            g2d.fillRect(100 + i * barWidth, 900, barWidth, barHeightScale);
         }
     }
 
