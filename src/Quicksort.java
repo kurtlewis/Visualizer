@@ -72,6 +72,7 @@ public class Quicksort extends ColoredSort {
             array[right] = temp;
         }
         else {
+            delay = 500;
             int temp = array[pivot];
             array[pivot] = array[right];
             array[right] = temp;
