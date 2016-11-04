@@ -44,7 +44,7 @@ public abstract class Sort extends Visualizer {
         //Setup the marker colors
         markerColors = new Color[array.length];
         for(int i = 0; i < array.length; i++) {
-            markerColors[i] = barColor;
+            markerColors[i] = backgroundColor;
         }
     }
 
