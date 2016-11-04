@@ -4,7 +4,7 @@
 
 import java.awt.Color;
 
-public class InsertionSort extends ColoredSort {
+public class InsertionSort extends Sort {
 
     //Colors of different things to show the user
     public static final Color SORTED = Color.decode("#FFFF33"), INSERT_COMP =
