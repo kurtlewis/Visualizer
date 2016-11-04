@@ -22,7 +22,7 @@ public class InsertionSort extends Sort {
     public InsertionSort() {
         super();
         for (int i = 0; i < array.length; i++)
-            setColor(i, UNSORTED);
+            setMarkerColor(i, UNSORTED);
         temp = array[0];
         sortIndex = 0;
     }
@@ -36,14 +36,14 @@ public class InsertionSort extends Sort {
         if (sortIndex >= progress) {
             array[sortIndex] = temp;
             progress++;
-            setColor(sortIndex, NORMAL_COMP);
+            setMarkerColor(sortIndex, NORMAL_COMP);
             sortIndex = 0;
             if(progress < array.length) {
                 temp = array[progress];
-                setColor(progress, INSERT_COMP);
+                setMarkerColor(progress, INSERT_COMP);
             }
             for(int i = 0; i < progress; i++) {
-                setColor(i, SORTED);
+                setMarkerColor(i, SORTED);
             }
         }
         else {
@@ -51,16 +51,16 @@ public class InsertionSort extends Sort {
                 int temp2 = array[sortIndex];
                 array[sortIndex] = temp;
                 temp = temp2;
-                setColor(sortIndex, INSERT_COMP);
+                setMarkerColor(sortIndex, INSERT_COMP);
                 delay = 50;
             }
             else {
                 delay = 10;
-                setColor(sortIndex, SORTED);
+                setMarkerColor(sortIndex, SORTED);
             }
             sortIndex++;
-            tempColor = getColor(sortIndex);
-            setColor(sortIndex, NORMAL_COMP);
+            tempColor = getMarkerColor(sortIndex);
+            setMarkerColor(sortIndex, NORMAL_COMP);
         }
 
         //still sorting
