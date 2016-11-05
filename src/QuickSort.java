@@ -5,7 +5,7 @@
 import java.awt.Color;
 import java.util.Stack;
 
-public class Quicksort extends Sort {
+public class QuickSort extends Sort {
 
     public static final Color RIGHT = Color.decode("#990000"), LEFT = Color.decode("#003366"),
             PIVOT = Color.decode("#999900"), DEFAULT_COLOR = Color.decode("#BA9242"),
@@ -15,7 +15,7 @@ public class Quicksort extends Sort {
     private int delay = 50;
     private Stack<Integer> commands = new Stack<>();
 
-    public Quicksort() {
+    public QuickSort() {
         super();
         for (int i = 0; i < array.length; i++)
             setMarkerColor(i, DEFAULT_COLOR);
