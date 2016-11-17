@@ -18,8 +18,8 @@ public class SelectionSort extends Sort {
         super();
 
         // mark all columns color as unsorted
-        for(int i = 0; i < this.array.length; i++) {
-            this.setMarkerColor(i, UNSORTED_COLOR);
+        for(int i = 0; i < array.length; i++) {
+            setMarkerColor(i, UNSORTED_COLOR);
         }
     }
 
@@ -27,52 +27,52 @@ public class SelectionSort extends Sort {
     public boolean cycle() {
         // no action to take if less than 2 in length
         // finished sorting if the sort Index is at the end of the array
-        if (this.array.length < 2 || this.sortIndex == this.array.length - 1) {
+        if (array.length < 2 || sortIndex == array.length - 1) {
             return true;
         }
 
         // if a new minimum was found, update the minimum index
-        if (this.array[this.searchIndex] < this.array[this.minIndex]) {
+        if (array[searchIndex] < array[minIndex]) {
             // unmark the old min and mark the new min
-            this.setMarkerColor(this.minIndex, DEFAULT_COLOR);
-            this.minIndex = this.searchIndex;
-            this.setMarkerColor(this.minIndex, COMP_LOW_COLOR);
+            setMarkerColor(minIndex, DEFAULT_COLOR);
+            minIndex = searchIndex;
+            setMarkerColor(minIndex, COMP_LOW_COLOR);
         }
         else {
             // umark this index
-            this.setMarkerColor(this.searchIndex, DEFAULT_COLOR);
+            setMarkerColor(searchIndex, DEFAULT_COLOR);
         }
 
         // increment the current searchIndex of searching the array
-        this.searchIndex++;
+        searchIndex++;
 
         // once the end of the array has been reached, swap elements
-        if (this.searchIndex == this.array.length) {
-            this.setMarkerColor(this.minIndex, DEFAULT_COLOR);
-            this.setMarkerColor(this.sortIndex, SORTED_COLOR);
+        if (searchIndex == array.length) {
+            setMarkerColor(minIndex, DEFAULT_COLOR);
+            setMarkerColor(sortIndex, SORTED_COLOR);
 
-            int temp = this.array[minIndex];
-            this.array[this.minIndex] = this.array[this.sortIndex];
-            this.array[this.sortIndex] = temp;
+            int temp = array[minIndex];
+            array[minIndex] = array[sortIndex];
+            array[sortIndex] = temp;
 
-            this.sortIndex++;
+            sortIndex++;
 
-            if (this.sortIndex == this.array.length - 1) {
+            if (sortIndex == array.length - 1) {
                 return true;
             }
 
-            this.searchIndex = this.sortIndex + 1;
-            this.minIndex = this.sortIndex;
+            searchIndex = sortIndex + 1;
+            minIndex = sortIndex;
 
-            for(int i = searchIndex; i < this.array.length; i++) {
-                this.setMarkerColor(i, UNSORTED_COLOR);
+            for(int i = searchIndex; i < array.length; i++) {
+                setMarkerColor(i, UNSORTED_COLOR);
             }
 
-            this.setMarkerColor(this.minIndex, COMP_LOW_COLOR);
+            setMarkerColor(minIndex, COMP_LOW_COLOR);
         }
         // if not at the end of the array yet, keep searching
         else {
-            this.setMarkerColor(this.sortIndex, COMP_HIGH_COLOR);
+            setMarkerColor(sortIndex, COMP_HIGH_COLOR);
         }
 
         return false;
