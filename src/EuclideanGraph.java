@@ -9,16 +9,18 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public abstract class EuclideanGraph extends Visualizer {
     private String title;
-    private ArrayList<Vertice> vertices;
+    private ArrayList<Vertex> vertices;
     private Color titleColor, backgroundColor;
-    private Color verticeColor, selectedVerticeColor;
+    private Color VertexColor, selectedVertexColor;
     private Color edgeColor, selectedEdgeColor;
-    private final static double MAX_X = Visualizer.DRAW_WIDTH;
+    private final static int MAX_X = Visualizer.DRAW_WIDTH;
     // subtract 100 for drawing of title
-    private final static double MAX_Y = Visualizer.DRAW_HEIGHT - 100;
+    private final static int MAX_Y = Visualizer.DRAW_HEIGHT - 100;
+    private HashSet<Edge> edges;
 
     public EuclideanGraph(String title) {
         this.title = title;
@@ -26,12 +28,13 @@ public abstract class EuclideanGraph extends Visualizer {
         // Set default colors
         backgroundColor = Color.BLACK;
         titleColor = Color.WHITE;
-        verticeColor = Color.WHITE;
-        selectedVerticeColor = Color.CYAN;
+        VertexColor = Color.WHITE;
+        selectedVertexColor = Color.CYAN;
         edgeColor = Color.GRAY;
         selectedEdgeColor = Color.MAGENTA;
 
-        vertices = new ArrayList<Vertice>();
+        vertices = new ArrayList<Vertex>();
+        edges = new HashSet<Edge>();
         buildGraph();
     }
 
@@ -39,20 +42,60 @@ public abstract class EuclideanGraph extends Visualizer {
     private void buildGraph() {
         Random generator  = new Random();
         int numVertices = generator.nextInt(50) + 50;
+        HashSet<Vertex> verticeSet = new HashSet<Vertex>();
+
+        // Generate random Vertices and add them to both the member variable list
+        // and the scope-local set. The set will be used for removing Vertices too far away from the rest of the graph.
         for (int i = 0; i < numVertices; i++) {
-            vertices.add(new Vertice(generator.nextInt(MAX_X), generator.nextInt(MAX_Y)));
+            // Add DRAW_HEIGHT  - MAX_Y to the Y coordinate because the top pixels
+            // are dedicated to the title - offset the y coordinate accordingly
+            Vertex v = new Vertex(generator.nextInt(MAX_X), generator.nextInt(MAX_Y) + Visualizer.DRAW_HEIGHT - MAX_Y);
+
+            // Don't allow for Vertices on top of each other
+            if (!verticeSet.contains(v))
+            {
+                verticeSet.add(v);
+                vertices.add(v);
+            } else {
+                i--;
+            }           
+        }
+        
+        // Add edges until either a connected graph is found or there are a 
+        // set amount of Vertices
+        while (!verticeSet.isEmpty() || edges.size() < vertices.size() * 3) {
+            Vertex vertexA = vertices.get(generator.nextInt(vertices.size()));
+            Vertex vertexB = vertices.get(generator.nextInt(vertices.size()));
+
+            Edge e = new Edge(vertexA, vertexB);
+            // arbitrarily set the max weight(length) to 60
+            if (!edges.contains(e) && e.getWeight() < 60 && !vertexA.equals(vertexB)) {
+                edges.add(e);
+                vertexA.addEdge(e);
+                vertexB.addEdge(e);
+                if (verticeSet.contains(vertexA)) {
+                    verticeSet.remove(vertexA);
+                }
+                if (verticeSet.contains(vertexB)) {
+                    verticeSet.remove(vertexB);
+                }
+            }
         }
 
-        // build a set of vertices and randomly add edges until a connected graph is reached
-
+        // If a Vertex couldn't be removed from the set, remove it from the graph
+        // because it's too far away or was just unlucky. I'll need to revisit this.
+        for (Vertex v: verticeSet) {
+            vertices.remove(v);
+        }
+        
     }
 
 
-    protected class Vertice {
+    protected class Vertex {
         private ArrayList<Edge> edges;
         private int x, y;
 
-        public Vertice(int x, int y) {
+        public Vertex(int x, int y) {
             this.x = x;
             this.y = y;
             edges = new ArrayList<Edge>();
@@ -70,30 +113,52 @@ public abstract class EuclideanGraph extends Visualizer {
             edges.add(e);
         }
 
-        public ArrayList<Edges> getEdges() {
+        public ArrayList<Edge> getEdges() {
             return edges;
         }
 
         @Override
-        public boolean equals(Vertice v) {
+        public boolean equals(Object obj) {
+            if (obj == null || !(obj instanceof Vertex)) return false;
+            Vertex v = (Vertex) obj;
             return (x == v.getX() && y ==v.getY());
         }
 
     }
 
     protected class Edge {
-        int weight;
-        Vertice a, b;
+        double weight;
+        Vertex a, b;
 
-        public Edge(Vertice a, Vertice b) {
+        public Edge(Vertex a, Vertex b) {
             this.a = a;
             this.b = b;
+            weight = Math.sqrt(Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY(), 2));
         }
 
-        public Edge(Vertice a, Vertice b, int weight) {
+        public Edge(Vertex a, Vertex b, double weight) {
             this.a = a;
             this.b = b;
             this.weight = weight;
+        }
+
+        public double getWeight() {
+            return weight;
+        }
+
+        public Vertex getVertexA() {
+            return a;
+        }
+
+        public Vertex getVertexB() {
+            return  b;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null || !(obj instanceof Edge)) return false;
+            Edge e = (Edge) obj;
+            return ((a.equals(e.getVertexA()) || a.equals(e.getVertexB()) ) && b.equals(e.getVertexA()) || b.equals(e.getVertexB()));
         }
     }
 }
