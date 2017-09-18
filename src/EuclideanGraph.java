@@ -64,13 +64,16 @@ public abstract class EuclideanGraph extends Visualizer {
         
         // Add edges until either a connected graph is found or there are a 
         // set amount of Vertices
-        while (!verticeSet.isEmpty() || edges.size() < vertices.size() * 3) {
+        //while (!verticeSet.isEmpty() || edges.size() < vertices.size()) {
+        for (int i = 0; i < 1000; i++) {
             Vertex vertexA = vertices.get(generator.nextInt(vertices.size()));
             Vertex vertexB = vertices.get(generator.nextInt(vertices.size()));
+            // Vertex vertexA = (Vertex)verticeSet.toArray()[generator.nextInt(verticeSet.size())];
+            // Vertex vertexB = (Vertex)verticeSet.toArray()[generator.nextInt(verticeSet.size())];
 
             Edge e = new Edge(vertexA, vertexB);
             // arbitrarily set the max weight(length) to 60
-            if (!edges.contains(e) && e.getWeight() < 60 && !vertexA.equals(vertexB)) {
+            if (!edges.contains(e) && e.getWeight() < 200 && !vertexA.equals(vertexB)) {
                 edges.add(e);
                 // Todo: consider making Edge() {constructor} call Vertex.addEdge
                 vertexA.addEdge(e);
@@ -106,7 +109,7 @@ public abstract class EuclideanGraph extends Visualizer {
         FontMetrics metr = this.getFontMetrics(font);
         g2d.drawString(title, (Visualizer.DRAW_WIDTH - metr.stringWidth(title)) / 2, 100);
 
-        // Print vertices
+        // Paint vertices
         for (Vertex v : vertices) {
             v.paint(g2d);
         }
@@ -121,10 +124,12 @@ public abstract class EuclideanGraph extends Visualizer {
         private ArrayList<Edge> edges;
         private int x, y;
         private Color color;
+        private int diameter;
 
         public Vertex(int x, int y) {
             this.x = x;
             this.y = y;
+            diameter = 8;
             edges = new ArrayList<Edge>();
         }
 
@@ -152,6 +157,10 @@ public abstract class EuclideanGraph extends Visualizer {
             this.color = color;
         }
 
+        public int getDiameter() {
+            return diameter;
+        }
+
         @Override
         public boolean equals(Object obj) {
             if (obj == null || !(obj instanceof Vertex)) return false;
@@ -161,7 +170,7 @@ public abstract class EuclideanGraph extends Visualizer {
 
         public void paint(Graphics2D g2d) {
             g2d.setColor(color);
-            g2d.drawOval(x, y, 3, 3);
+            g2d.fillOval(x, y, 8, 8);
         }
 
     }
@@ -213,7 +222,8 @@ public abstract class EuclideanGraph extends Visualizer {
 
         public void paint(Graphics2D g2d) {
             g2d.setColor(color);
-            g2d.drawLine(a.getX(), a.getY(), b.getX(), b.getY());
+            int offset = a.getDiameter() /2;
+            g2d.drawLine(a.getX() + offset, a.getY() + offset, b.getX() + offset, b.getY() + offset);
             // Todo: print weight
         }
     }
