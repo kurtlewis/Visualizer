@@ -13,14 +13,15 @@ import java.util.HashSet;
 
 public abstract class EuclideanGraph extends Visualizer {
     private String title;
-    private ArrayList<Vertex> vertices;
+    protected ArrayList<Vertex> vertices;
+    protected HashSet<Edge> edges;
     private Color titleColor, backgroundColor;
-    private Color VertexColor, selectedVertexColor;
-    private Color edgeColor, selectedEdgeColor;
+    protected Color vertexColor, selectedVertexColor;
+    protected Color edgeColor, selectedEdgeColor;
     private final static int MAX_X = Visualizer.DRAW_WIDTH;
     // subtract 100 for drawing of title
     private final static int MAX_Y = Visualizer.DRAW_HEIGHT - 100;
-    private HashSet<Edge> edges;
+
 
     public EuclideanGraph(String title) {
         this.title = title;
@@ -28,7 +29,7 @@ public abstract class EuclideanGraph extends Visualizer {
         // Set default colors
         backgroundColor = Color.BLACK;
         titleColor = Color.WHITE;
-        VertexColor = Color.WHITE;
+        vertexColor = Color.WHITE;
         selectedVertexColor = Color.CYAN;
         edgeColor = Color.GRAY;
         selectedEdgeColor = Color.MAGENTA;
@@ -71,6 +72,7 @@ public abstract class EuclideanGraph extends Visualizer {
             // arbitrarily set the max weight(length) to 60
             if (!edges.contains(e) && e.getWeight() < 60 && !vertexA.equals(vertexB)) {
                 edges.add(e);
+                // Todo: consider making Edge() {constructor} call Vertex.addEdge
                 vertexA.addEdge(e);
                 vertexB.addEdge(e);
                 if (verticeSet.contains(vertexA)) {
@@ -90,10 +92,35 @@ public abstract class EuclideanGraph extends Visualizer {
         
     }
 
+    @Override
+    public void paintVisualization(Graphics2D g2d) {
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        // Draw Background
+        g2d.setColor(backgroundColor);
+        g2d.fillRect(0, 0, Visualizer.DRAW_WIDTH, Visualizer.DRAW_HEIGHT);
+
+        //draw font
+        Font font = new Font("Helvetica", Font.BOLD, 60);
+        g2d.setFont(font);
+        g2d.setColor(titleColor);
+        FontMetrics metr = this.getFontMetrics(font);
+        g2d.drawString(title, (Visualizer.DRAW_WIDTH - metr.stringWidth(title)) / 2, 100);
+
+        // Print vertices
+        for (Vertex v : vertices) {
+            v.paint(g2d);
+        }
+
+        for (Edge e : edges) {
+            e.paint(g2d);
+        }
+    }
+
 
     protected class Vertex {
         private ArrayList<Edge> edges;
         private int x, y;
+        private Color color;
 
         public Vertex(int x, int y) {
             this.x = x;
@@ -101,7 +128,7 @@ public abstract class EuclideanGraph extends Visualizer {
             edges = new ArrayList<Edge>();
         }
 
-        public int getX(){
+        public int getX() {
             return x;
         }
 
@@ -117,6 +144,14 @@ public abstract class EuclideanGraph extends Visualizer {
             return edges;
         }
 
+        public Color getColor() {
+            return color;
+        }
+
+        public void setColor(Color color) {
+            this.color = color;
+        }
+
         @Override
         public boolean equals(Object obj) {
             if (obj == null || !(obj instanceof Vertex)) return false;
@@ -124,12 +159,19 @@ public abstract class EuclideanGraph extends Visualizer {
             return (x == v.getX() && y ==v.getY());
         }
 
+        public void paint(Graphics2D g2d) {
+            g2d.setColor(color);
+            g2d.drawOval(x, y, 3, 3);
+        }
+
     }
 
     protected class Edge {
         double weight;
         Vertex a, b;
+        Color color;
 
+        // Todo: constructor for disabling weight
         public Edge(Vertex a, Vertex b) {
             this.a = a;
             this.b = b;
@@ -154,11 +196,25 @@ public abstract class EuclideanGraph extends Visualizer {
             return  b;
         }
 
+        public Color getColor() {
+            return color;
+        }
+
+        public void setColor(Color color) {
+            this.color = color;
+        }
+
         @Override
         public boolean equals(Object obj) {
             if (obj == null || !(obj instanceof Edge)) return false;
             Edge e = (Edge) obj;
             return ((a.equals(e.getVertexA()) || a.equals(e.getVertexB()) ) && b.equals(e.getVertexA()) || b.equals(e.getVertexB()));
+        }
+
+        public void paint(Graphics2D g2d) {
+            g2d.setColor(color);
+            g2d.drawLine(a.getX(), a.getY(), b.getX(), b.getY());
+            // Todo: print weight
         }
     }
 }
