@@ -64,14 +64,30 @@ public abstract class EuclideanGraph extends Visualizer {
         
         // Add edges until either a connected graph is found or there are a 
         // set amount of Vertices
-        //while (!verticeSet.isEmpty() || edges.size() < vertices.size()) {
-        for (int i = 0; i < 1000; i++) {
+        int consecutiveFailures = 0;
+        while (!verticeSet.isEmpty() && edges.size() < vertices.size() * 2 && consecutiveFailures < 400) {
+            // System.out.println("Num Edges: " +  edges.size());
+            // System.out.println("Vertices Set size:" + verticeSet.size());
+        //for (int i = 0; i < 1000; i++) {
             Vertex vertexA = vertices.get(generator.nextInt(vertices.size()));
             Vertex vertexB = vertices.get(generator.nextInt(vertices.size()));
             // Vertex vertexA = (Vertex)verticeSet.toArray()[generator.nextInt(verticeSet.size())];
             // Vertex vertexB = (Vertex)verticeSet.toArray()[generator.nextInt(verticeSet.size())];
 
             Edge e = new Edge(vertexA, vertexB);
+
+            boolean intersects = false;
+            for (Edge edgeTwo : edges) {
+                if (e.intersects(edgeTwo)) {
+                    intersects = true;
+                    break;
+                }
+            }
+            if (intersects) {
+                consecutiveFailures++;
+                continue;
+            }
+
             // arbitrarily set the max weight(length) to 60
             if (!edges.contains(e) && e.getWeight() < 200 && !vertexA.equals(vertexB)) {
                 edges.add(e);
@@ -84,7 +100,11 @@ public abstract class EuclideanGraph extends Visualizer {
                 if (verticeSet.contains(vertexB)) {
                     verticeSet.remove(vertexB);
                 }
+                consecutiveFailures = 0;
+            } else {
+                consecutiveFailures++;
             }
+
         }
 
         // If a Vertex couldn't be removed from the set, remove it from the graph
@@ -225,6 +245,23 @@ public abstract class EuclideanGraph extends Visualizer {
             int offset = a.getDiameter() /2;
             g2d.drawLine(a.getX() + offset, a.getY() + offset, b.getX() + offset, b.getY() + offset);
             // Todo: print weight
+        }
+
+        public boolean intersects(Edge e) {
+            if (Math.max(a.getX(), b.getX()) > Math.min(e.getVertexA().getX(), e.getVertexB().getX()) 
+                && Math.min(a.getX(), b.getX()) < Math.max(e.getVertexA().getX(), e.getVertexB().getX())) {
+                if (Math.max(a.getY(), b.getY()) > Math.min(e.getVertexA().getY(), e.getVertexB().getY()) 
+                    && Math.min(a.getY(), b.getY()) < Math.max(e.getVertexA().getY(), e.getVertexB().getY())) {
+                    return true;
+                }
+            }
+            // if (Math.max(a.getY(), b.getY()) > Math.max(e.getVertexA().getY(), e.getVertexB().getY()) && Math.min(a.getY(), b.getY()) < Math.max(e.getVertexA().getY(), e.getVertexB().getY())) {
+            //     if (Math.max(a.getX(), b.getX()) > Math.max(e.getVertexA().getX(), e.getVertexB().getX()) && Math.min(a.getX(), b.getX()) < Math.max(e.getVertexA().getX(), e.getVertexB().getX())) {
+            //         return true;
+            //     }
+            // }
+            
+            return false;
         }
     }
 }
