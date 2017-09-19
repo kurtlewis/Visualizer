@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.BasicStroke;
 import java.awt.RenderingHints;
 import java.util.Random;
 import java.util.ArrayList;
@@ -45,12 +47,15 @@ public abstract class EuclideanGraph extends Visualizer {
         int numVertices = generator.nextInt(50) + 50;
         HashSet<Vertex> verticeSet = new HashSet<Vertex>();
 
+        // padding so vertices arent on the edge of the screen
+        int edgePadding = 30;
         // Generate random Vertices and add them to both the member variable list
         // and the scope-local set. The set will be used for removing Vertices too far away from the rest of the graph.
         for (int i = 0; i < numVertices; i++) {
             // Add DRAW_HEIGHT  - MAX_Y to the Y coordinate because the top pixels
             // are dedicated to the title - offset the y coordinate accordingly
-            Vertex v = new Vertex(generator.nextInt(MAX_X), generator.nextInt(MAX_Y) + Visualizer.DRAW_HEIGHT - MAX_Y);
+            Vertex v = new Vertex(generator.nextInt(MAX_X - 2 * edgePadding) + edgePadding, 
+                                  generator.nextInt(MAX_Y - 2 *edgePadding) + Visualizer.DRAW_HEIGHT - MAX_Y + edgePadding);
 
             // Don't allow for Vertices on top of each other
             if (!verticeSet.contains(v))
@@ -65,7 +70,7 @@ public abstract class EuclideanGraph extends Visualizer {
         // Add edges until either a connected graph is found or there are a 
         // set amount of Vertices
         int consecutiveFailures = 0;
-        while (!verticeSet.isEmpty() && edges.size() < vertices.size() * 2 && consecutiveFailures < 400) {
+        while (!verticeSet.isEmpty() && edges.size() < vertices.size() * 3 && consecutiveFailures < 400) {
             // System.out.println("Num Edges: " +  edges.size());
             // System.out.println("Vertices Set size:" + verticeSet.size());
         //for (int i = 0; i < 1000; i++) {
@@ -149,7 +154,7 @@ public abstract class EuclideanGraph extends Visualizer {
         public Vertex(int x, int y) {
             this.x = x;
             this.y = y;
-            diameter = 8;
+            diameter = 10;
             edges = new ArrayList<Edge>();
         }
 
@@ -190,7 +195,7 @@ public abstract class EuclideanGraph extends Visualizer {
 
         public void paint(Graphics2D g2d) {
             g2d.setColor(color);
-            g2d.fillOval(x, y, 8, 8);
+            g2d.fillOval(x, y, diameter, diameter);
         }
 
     }
@@ -241,10 +246,13 @@ public abstract class EuclideanGraph extends Visualizer {
         }
 
         public void paint(Graphics2D g2d) {
+            Stroke old = g2d.getStroke();
+            g2d.setStroke(new BasicStroke(3));
             g2d.setColor(color);
             int offset = a.getDiameter() /2;
             g2d.drawLine(a.getX() + offset, a.getY() + offset, b.getX() + offset, b.getY() + offset);
             // Todo: print weight
+            g2d.setStroke(old);
         }
 
         public boolean intersects(Edge e) {
