@@ -42,16 +42,20 @@ public abstract class EuclideanGraph extends Visualizer {
     }
 
 
+    /*
+     * Builds a connected graph with a random number of vertices
+     */
     private void buildGraph() {
         Random generator  = new Random();
+        // Randomly determine ideal number of vertices
         int numVertices = generator.nextInt(50) + 50;
+        // Will be used for removing Vertices too far away from the rest of the graph.
         HashSet<Vertex> verticeSet = new HashSet<Vertex>();
-
         // padding so vertices arent on the edge of the screen
         int edgePadding = 30;
-        // Generate random Vertices and add them to both the member variable list
-        // and the scope-local set. The set will be used for removing Vertices too far away from the rest of the graph.
-        for (int i = 0; i < numVertices; i++) {
+
+        // Generate random Vertices and add them to both the member variable list and the scope-local set
+        while (vertices.size() < numVertices) {
             // Add DRAW_HEIGHT  - MAX_Y to the Y coordinate because the top pixels
             // are dedicated to the title - offset the y coordinate accordingly
             Vertex v = new Vertex(generator.nextInt(MAX_X - 2 * edgePadding) + edgePadding, 
@@ -63,13 +67,11 @@ public abstract class EuclideanGraph extends Visualizer {
             {
                 verticeSet.add(v);
                 vertices.add(v);
-            } else {
-                i--;
-            }           
+            }      
         }
         
         // Add edges until either a connected graph is found or there are a 
-        // set amount of Vertices
+        // set amount of edges
         int consecutiveFailures = 0;
         while (!verticeSet.isEmpty() && edges.size() < vertices.size() * 3 && consecutiveFailures < 1000) {
             Vertex vertexA = vertices.get(generator.nextInt(vertices.size()));
@@ -110,7 +112,7 @@ public abstract class EuclideanGraph extends Visualizer {
         }
 
         // If a Vertex couldn't be removed from the set, remove it from the graph
-        // because it's too far away or was just unlucky. I'll need to revisit this.
+        // because it's too far away or was just unlucky
         for (Vertex v: verticeSet) {
             vertices.remove(v);
         }
@@ -124,13 +126,14 @@ public abstract class EuclideanGraph extends Visualizer {
         g2d.setColor(backgroundColor);
         g2d.fillRect(0, 0, Visualizer.DRAW_WIDTH, Visualizer.DRAW_HEIGHT);
 
-        //draw font
+        // Draw font
         Font font = new Font("Helvetica", Font.BOLD, 60);
         g2d.setFont(font);
         g2d.setColor(titleColor);
         FontMetrics metr = this.getFontMetrics(font);
         g2d.drawString(title, (Visualizer.DRAW_WIDTH - metr.stringWidth(title)) / 2, 100);
 
+        // Paint vertices
         for (Edge e : edges) {
             e.paint(g2d);
         }
@@ -209,7 +212,6 @@ public abstract class EuclideanGraph extends Visualizer {
         Vertex a, b;
         Color color;
 
-        // Todo: constructor for disabling weight
         public Edge(Vertex a, Vertex b) {
             this.a = a;
             this.b = b;
@@ -266,6 +268,12 @@ public abstract class EuclideanGraph extends Visualizer {
             int offset = a.getDiameter() /2;
             g2d.drawLine(a.getX() + offset, a.getY() + offset, b.getX() + offset, b.getY() + offset);
             // Todo: print weight
+            Font font = new Font("Helvetica", Font.PLAIN, 15);
+            g2d.setFont(font);
+            g2d.setColor(titleColor);
+            // Build weight as a string, with a max length of 5 characters
+            String weightStr = Double.toString(weight).subSequence(0, Math.min(Double.toString(weight).length(), 5)).toString();
+            g2d.drawString(weightStr, (a.getX() + b.getX()) / 2, (a.getY() + b.getY()) / 2);
             g2d.setStroke(old);
         }
 
@@ -277,12 +285,6 @@ public abstract class EuclideanGraph extends Visualizer {
                     return true;
                 }
             }
-            // if (Math.max(a.getY(), b.getY()) > Math.max(e.getVertexA().getY(), e.getVertexB().getY()) && Math.min(a.getY(), b.getY()) < Math.max(e.getVertexA().getY(), e.getVertexB().getY())) {
-            //     if (Math.max(a.getX(), b.getX()) > Math.max(e.getVertexA().getX(), e.getVertexB().getX()) && Math.min(a.getX(), b.getX()) < Math.max(e.getVertexA().getX(), e.getVertexB().getX())) {
-            //         return true;
-            //     }
-            // }
-            
             return false;
         }
     }
