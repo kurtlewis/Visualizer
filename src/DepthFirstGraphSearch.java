@@ -16,12 +16,12 @@ public class DepthFirstGraphSearch extends EuclideanGraph {
 
     @Override
     public boolean cycle() {
-        return false;
+        return true;
     }
 
     @Override
     public int getDelay() {
-        return 100;
+        return 2000;
     }
 
 

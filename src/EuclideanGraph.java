@@ -31,10 +31,10 @@ public abstract class EuclideanGraph extends Visualizer {
         // Set default colors
         backgroundColor = Color.BLACK;
         titleColor = Color.WHITE;
-        vertexColor = Color.WHITE;
-        selectedVertexColor = Color.CYAN;
-        edgeColor = Color.GRAY;
-        selectedEdgeColor = Color.MAGENTA;
+        vertexColor = Color.CYAN;
+        selectedVertexColor = Color.GREEN;
+        edgeColor = Color.MAGENTA;
+        selectedEdgeColor = Color.ORANGE;
 
         vertices = new ArrayList<Vertex>();
         edges = new HashSet<Edge>();
@@ -55,7 +55,8 @@ public abstract class EuclideanGraph extends Visualizer {
             // Add DRAW_HEIGHT  - MAX_Y to the Y coordinate because the top pixels
             // are dedicated to the title - offset the y coordinate accordingly
             Vertex v = new Vertex(generator.nextInt(MAX_X - 2 * edgePadding) + edgePadding, 
-                                  generator.nextInt(MAX_Y - 2 *edgePadding) + Visualizer.DRAW_HEIGHT - MAX_Y + edgePadding);
+                                  generator.nextInt(MAX_Y - 2 *edgePadding) + Visualizer.DRAW_HEIGHT - MAX_Y + edgePadding,
+                                  vertexColor);
 
             // Don't allow for Vertices on top of each other
             if (!verticeSet.contains(v))
@@ -70,16 +71,11 @@ public abstract class EuclideanGraph extends Visualizer {
         // Add edges until either a connected graph is found or there are a 
         // set amount of Vertices
         int consecutiveFailures = 0;
-        while (!verticeSet.isEmpty() && edges.size() < vertices.size() * 3 && consecutiveFailures < 400) {
-            // System.out.println("Num Edges: " +  edges.size());
-            // System.out.println("Vertices Set size:" + verticeSet.size());
-        //for (int i = 0; i < 1000; i++) {
+        while (!verticeSet.isEmpty() && edges.size() < vertices.size() * 3 && consecutiveFailures < 1000) {
             Vertex vertexA = vertices.get(generator.nextInt(vertices.size()));
             Vertex vertexB = vertices.get(generator.nextInt(vertices.size()));
-            // Vertex vertexA = (Vertex)verticeSet.toArray()[generator.nextInt(verticeSet.size())];
-            // Vertex vertexB = (Vertex)verticeSet.toArray()[generator.nextInt(verticeSet.size())];
 
-            Edge e = new Edge(vertexA, vertexB);
+            Edge e = new Edge(vertexA, vertexB, edgeColor);
 
             boolean intersects = false;
             for (Edge edgeTwo : edges) {
@@ -93,8 +89,9 @@ public abstract class EuclideanGraph extends Visualizer {
                 continue;
             }
 
-            // arbitrarily set the max weight(length) to 60
-            if (!edges.contains(e) && e.getWeight() < 200 && !vertexA.equals(vertexB)) {
+            // By experimentation, the optimal max weight seems to be around 1/5 the size of the draw area
+            // This optimizes number of nodes
+            if (!edges.contains(e) && e.getWeight() < MAX_Y / 5 && !vertexA.equals(vertexB)) {
                 edges.add(e);
                 // Todo: consider making Edge() {constructor} call Vertex.addEdge
                 vertexA.addEdge(e);
@@ -134,14 +131,16 @@ public abstract class EuclideanGraph extends Visualizer {
         FontMetrics metr = this.getFontMetrics(font);
         g2d.drawString(title, (Visualizer.DRAW_WIDTH - metr.stringWidth(title)) / 2, 100);
 
-        // Paint vertices
+        for (Edge e : edges) {
+            e.paint(g2d);
+        }
+
+        // Paint vertices second to overlap color of edges
         for (Vertex v : vertices) {
             v.paint(g2d);
         }
 
-        for (Edge e : edges) {
-            e.paint(g2d);
-        }
+        
     }
 
 
@@ -156,6 +155,11 @@ public abstract class EuclideanGraph extends Visualizer {
             this.y = y;
             diameter = 10;
             edges = new ArrayList<Edge>();
+        }
+
+        public Vertex(int x, int y, Color color) {
+            this(x, y);
+            this.color = color;
         }
 
         public int getX() {
@@ -212,10 +216,20 @@ public abstract class EuclideanGraph extends Visualizer {
             weight = Math.sqrt(Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY(), 2));
         }
 
+        public Edge(Vertex a, Vertex b, Color color) {
+            this(a, b);
+            this.color = color;
+        }
+
         public Edge(Vertex a, Vertex b, double weight) {
             this.a = a;
             this.b = b;
             this.weight = weight;
+        }
+
+        public Edge(Vertex a, Vertex b, double weight, Color color) {
+            this(a, b, weight);
+            this.color = color;
         }
 
         public double getWeight() {
