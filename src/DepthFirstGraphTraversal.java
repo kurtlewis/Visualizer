@@ -14,6 +14,7 @@ public class DepthFirstGraphTraversal extends EuclideanGraph {
     private Stack<Edge> edgeStack;
     private HashSet<Vertex> visitedVertices;
     private HashSet<Edge> visitedEdges;
+    private Color stackColor = Color.RED;
 
     public DepthFirstGraphTraversal() {
         super("Depth First Graph Traversal");
@@ -27,6 +28,9 @@ public class DepthFirstGraphTraversal extends EuclideanGraph {
         v.setColor(selectedVertexColor);
         visitedVertices.add(v);
         edgeStack.addAll(v.getEdges());
+        for (Edge e : v.getEdges()) {
+            e.setColor(stackColor);
+        }
     }
 
     @Override
@@ -35,7 +39,12 @@ public class DepthFirstGraphTraversal extends EuclideanGraph {
         if (edgeStack.empty()) {
             return true;
         }
-        Edge e = edgeStack.pop();
+
+        // Remove as many edges as needed incase the edge has already been visited
+        Edge e;
+        do {
+            e = edgeStack.pop();
+        } while(visitedEdges.contains(e) && !edgeStack.isEmpty());
 
         // Mark edge as visited
         visitedEdges.add(e);
@@ -54,6 +63,7 @@ public class DepthFirstGraphTraversal extends EuclideanGraph {
                 // Only add edges that haven't been visited yet
                 if (!visitedEdges.contains(newEdge)) {
                     edgeStack.add(newEdge);
+                    newEdge.setColor(stackColor);
                 }
             }
             // Mark vertice as visited
@@ -65,7 +75,7 @@ public class DepthFirstGraphTraversal extends EuclideanGraph {
 
     @Override
     public int getDelay() {
-        return 200;
+        return 400;
     }
 
 
