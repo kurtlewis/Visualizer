@@ -275,18 +275,20 @@ public abstract class EuclideanGraph extends Visualizer {
         }
 
         public void paint(Graphics2D g2d) {
+            // Save the old stroke so we can reset it
             Stroke old = g2d.getStroke();
             g2d.setStroke(new BasicStroke(3));
             g2d.setColor(color);
             int offset = a.getDiameter() /2;
             g2d.drawLine(a.getX() + offset, a.getY() + offset, b.getX() + offset, b.getY() + offset);
-            // Todo: print weight
+
+            // Prep Font for drawing weight
             Font font = new Font("Helvetica", Font.PLAIN, 15);
             g2d.setFont(font);
             g2d.setColor(titleColor);
             // Build weight as a string, with a max length of 5 characters
             String weightStr = Double.toString(weight).subSequence(0, Math.min(Double.toString(weight).length(), 5)).toString();
-            g2d.drawString(weightStr, (a.getX() + b.getX()) / 2, (a.getY() + b.getY()) / 2);
+            //g2d.drawString(weightStr, (a.getX() + b.getX()) / 2, (a.getY() + b.getY()) / 2);
             g2d.setStroke(old);
         }
 
