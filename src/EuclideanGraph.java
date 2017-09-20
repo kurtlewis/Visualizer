@@ -174,7 +174,20 @@ public abstract class EuclideanGraph extends Visualizer {
         }
 
         public void addEdge(Edge e) {
-            edges.add(e);
+            // Add edges in sorted order by weight
+            if (edges.isEmpty()) {
+                // There is nothing in the list, so add the edge in the first spot
+                edges.add(e);
+            } else {
+                for (int i = 0; i < edges.size(); i++) {
+                    if (e.getWeight() < edges.get(i).getWeight()) {
+                        edges.add(i, e);
+                        return;
+                    }
+                }
+                // This edge is the longer than the rest of the list
+                edges.add(e);
+            }
         }
 
         public ArrayList<Edge> getEdges() {
