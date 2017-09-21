@@ -14,10 +14,10 @@ public class DepthFirstGraphTraversal extends EuclideanGraph {
     private Stack<Edge> edgeStack;
     private HashSet<Vertex> visitedVertices;
     private HashSet<Edge> visitedEdges;
-    private Color stackColor = Color.RED;
+    private Color stackColor, selectedEdgeColor, selectedVertexColor;
 
     public DepthFirstGraphTraversal() {
-        super("Depth First Graph Traversal");
+        super("Depth First Graph Traversal", Color.BLACK, Color.WHITE, Color.CYAN, Color.MAGENTA);
         edgeStack = new Stack<Edge>();
         visitedVertices = new HashSet<Vertex>();
         visitedEdges = new HashSet<Edge>();
@@ -31,6 +31,11 @@ public class DepthFirstGraphTraversal extends EuclideanGraph {
         for (Edge e : v.getEdges()) {
             e.setColor(stackColor);
         }
+
+        // Set Colors
+        stackColor = Color.RED;
+        selectedEdgeColor = Color.YELLOW;
+        selectedVertexColor = Color.GREEN;
     }
 
     @Override
