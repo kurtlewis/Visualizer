@@ -1,14 +1,10 @@
-/***
- @author Kurt Lewis
+/**
+ * Extends the Graph class to provide a randomly generated graph. This graph will likely contain cycles, and may not be fully connected
+ * @see Graph
+ * @author Kurt Lewis
  ***/
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
-import java.awt.BasicStroke;
-import java.awt.RenderingHints;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,6 +14,8 @@ public abstract class EuclideanGraph extends Graph {
 
     public EuclideanGraph(String title) {
         super(title);
+        this.vertexColor = Color.CYAN;
+        this.edgeColor = Color.MAGENTA;
         buildGraph();
     }
 
@@ -29,8 +27,9 @@ public abstract class EuclideanGraph extends Graph {
     }
 
 
-    /*
+    /**
      * Builds a connected graph with a random number of vertices
+     * @author Kurt Lewis
      */
     private void buildGraph() {
         Random generator  = new Random();
@@ -59,8 +58,10 @@ public abstract class EuclideanGraph extends Graph {
         
         // Add edges until either a connected graph is found or there are a 
         // set amount of edges
+        // Bail if there are more than a set number of consecutive failures
         int consecutiveFailures = 0;
-        while (!verticeSet.isEmpty() && edges.size() < vertices.size() * 3 && consecutiveFailures < 1000) {
+        int maxConsecutiveFailures = 1000;
+        while (!verticeSet.isEmpty() && edges.size() < vertices.size() * 3 && consecutiveFailures < maxConsecutiveFailures) {
             Vertex vertexA = vertices.get(generator.nextInt(vertices.size()));
             Vertex vertexB = vertices.get(generator.nextInt(vertices.size()));
 

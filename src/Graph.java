@@ -1,6 +1,7 @@
-/***
+/**
+ * Extends visualizer to provide the core components of a graph visualization. Does not create or implement graph generation
  * @author Kurt Lewis
- ***/
+ */
 
 import java.awt.Color;
 import java.awt.Font;
@@ -26,7 +27,9 @@ import java.util.HashSet;
         this(title, Color.BLACK, Color.WHITE);
     }
 
-    // Main constuctor
+    /**
+     * Main Constructor for graph class
+     */
     public Graph(String title, Color backgroundColor, Color titleColor) {
         this.titleColor = titleColor;
         this.backgroundColor = backgroundColor;
@@ -62,12 +65,20 @@ import java.util.HashSet;
         
     }
 
+
+    /**
+     * Provides an implementation of a vertex, containing points, size, and color
+     * @author Kurt Lewis
+     */
     protected class Vertex {
         private ArrayList<Edge> edges;
         private int x, y;
         private Color color;
         private int diameter;
 
+        /**
+         * Main constructor for Vertex
+         */
         public Vertex(int x, int y) {
             this.x = x;
             this.y = y;
@@ -88,10 +99,18 @@ import java.util.HashSet;
             return y;
         }
 
+        /**
+         * Adds edge to end of edge list
+         * @see Vertex.addEdgeWeightSorted
+         */
         public void addEdge(Edge e) {
             edges.add(e);
         }
 
+        /**
+         * Adds edge to edge list as ordered by weight. If building an ordered list of edges,
+         * this is the method that must be used to build the edge list.
+         */
         public void addEdgeWeightSorted(Edge e) {
             // Add edges in sorted order by weight
             if (edges.isEmpty()) {
@@ -139,6 +158,10 @@ import java.util.HashSet;
 
     }
 
+    /**
+     * Implementation of Edge class. Contains weight, vertices, and color
+     * @author Kurt Lewis
+     */
     protected class Edge {
         double weight;
         Vertex a, b;
@@ -187,6 +210,9 @@ import java.util.HashSet;
             this.color = color;
         }
 
+        /**
+         * Enable for weight to be shown near the center of an edge
+         */
         public void setShowWeight(boolean showWeight) {
             this.showWeight = showWeight;
         }
@@ -221,14 +247,23 @@ import java.util.HashSet;
             g2d.setStroke(old);
         }
 
+        /**
+         * Return strue if given edge intersects with this edge
+         * @return true if given edges intersect
+         */
         public boolean intersects(Edge e) {
+            // The larger x value of this edge must be greater than the minimum x value of the given edge
+            // The smaller x value of this edge must be smaller than the larger x value of the given edge
             if (Math.max(a.getX(), b.getX()) > Math.min(e.getVertexA().getX(), e.getVertexB().getX()) 
                 && Math.min(a.getX(), b.getX()) < Math.max(e.getVertexA().getX(), e.getVertexB().getX())) {
+                // The larger y value of this edge must be greater than the smaller y value of the given edge
+                // The smaller y value of this edge must be smaller than the larger y value of the given edge
                 if (Math.max(a.getY(), b.getY()) > Math.min(e.getVertexA().getY(), e.getVertexB().getY()) 
                     && Math.min(a.getY(), b.getY()) < Math.max(e.getVertexA().getY(), e.getVertexB().getY())) {
                     return true;
                 }
             }
+            // Did not intersect, so return false
             return false;
         }
     }

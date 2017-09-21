@@ -1,10 +1,9 @@
 /***
- @author Kurt Lewis
- Traverses all edges & vertices connected to the randomly selected starting vertex
- ***/
+ * Traverses all edges & vertices connected to the randomly selected starting vertex
+ * @author Kurt Lewis
+ */
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Stack;
